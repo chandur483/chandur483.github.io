@@ -1,7 +1,1308 @@
 ---
-# You don't need to edit this file, it's empty on purpose.
-# Edit theme's home layout instead if you wanna make some changes
-# See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 layout: home
-author_profile: true
+title: Mr. White | The Professor's Lab Notes
 ---
+
+<style>
+/* Retro Moody Color Palette */
+:root {
+  --retro-bg: #0d0d0d;
+  --retro-surface: #1a1a1a;
+  --retro-text: #c5c5c5;
+  --retro-text-dim: #858585;
+  --retro-border: #2d2d2d;
+  --htb-green: #9fef00;
+  --thm-red: #c0392b;
+  --accent-muted: #5a6c7d;
+}
+
+/* FORCE DARK BACKGROUND EVERYWHERE */
+html, body {
+  background: var(--retro-bg) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body {
+  background-color: var(--retro-bg) !important;
+}
+
+/* Override all Jekyll/Minima theme backgrounds */
+.page-content, .wrapper, main, article, .home {
+  background: var(--retro-bg) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: 100% !important;
+}
+
+.site-header, .site-footer {
+  background: var(--retro-bg) !important;
+}
+
+/* Remove any white backgrounds from posts area */
+.post-list-heading {
+  display: none !important;
+}
+
+/* ===================================================
+   CHARACTER SELECTOR SECTION
+   =================================================== */
+.character-selector-wrapper {
+  width: 100%;
+  background: var(--retro-bg);
+  padding: 60px 20px;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid var(--htb-green);
+}
+
+/* Background Image */
+.bg-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.bg-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(3px);
+}
+
+body.theme-active .bg-image {
+  opacity: 1;
+}
+
+/* ANIMATED SCANLINES */
+.character-selector-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.02) 2px,
+    rgba(255, 255, 255, 0.02) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: scan 8s linear infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100px); }
+}
+
+/* THEME VARIATIONS */
+body.theme-fightclub {
+  background: linear-gradient(135deg, #1a0000 0%, #0a0000 100%) !important;
+}
+
+body.theme-mrrobot {
+  background: linear-gradient(135deg, #001a00 0%, #000a00 100%) !important;
+}
+
+body.theme-breakingbad {
+  background: linear-gradient(135deg, #1a1a00 0%, #0a0a00 100%) !important;
+}
+
+.selector-header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 2;
+}
+
+.selector-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 16px;
+  margin-bottom: 15px;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  animation: titleGlow 3s ease-in-out infinite;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Courier New', monospace;
+}
+
+body.theme-fightclub .selector-title {
+  color: #ff4444;
+  text-shadow: 0 0 40px rgba(255, 68, 68, 0.7);
+}
+
+body.theme-mrrobot .selector-title {
+  color: #00ff00;
+  text-shadow: 0 0 40px rgba(0, 255, 0, 0.7);
+}
+
+body.theme-breakingbad .selector-title {
+  color: #9fef00;
+  text-shadow: 0 0 40px rgba(159, 239, 0, 0.7);
+}
+
+@keyframes titleGlow {
+  0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+  50% { text-shadow: 0 0 40px rgba(255, 255, 255, 0.4); }
+}
+
+.selector-subtitle {
+  font-size: 1.4rem;
+  color: #555;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+}
+
+/* CHARACTER GRID */
+.character-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.character-card {
+  background: #0f0f0f;
+  border: 3px solid #222;
+  border-radius: 20px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 2/3;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.character-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.9) 100%);
+  z-index: 1;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.character-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+.character-card:hover {
+  transform: translateY(-25px) scale(1.05);
+  border-color: #666;
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.9);
+}
+
+.character-card:hover::before {
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%);
+}
+
+.character-card.fightclub::after {
+  background: radial-gradient(circle at center, rgba(255, 68, 68, 0.15) 0%, transparent 70%);
+}
+
+.character-card.fightclub:hover {
+  border-color: #ff4444;
+  box-shadow: 0 35px 80px rgba(255, 68, 68, 0.6), 0 0 100px rgba(255, 68, 68, 0.3);
+}
+
+.character-card.fightclub:hover::after {
+  opacity: 1;
+}
+
+.character-card.mrrobot::after {
+  background: radial-gradient(circle at center, rgba(0, 255, 0, 0.15) 0%, transparent 70%);
+}
+
+.character-card.mrrobot:hover {
+  border-color: #00ff00;
+  box-shadow: 0 35px 80px rgba(0, 255, 0, 0.6), 0 0 100px rgba(0, 255, 0, 0.3);
+}
+
+.character-card.mrrobot:hover::after {
+  opacity: 1;
+}
+
+.character-card.breakingbad::after {
+  background: radial-gradient(circle at center, rgba(159, 239, 0, 0.15) 0%, transparent 70%);
+}
+
+.character-card.breakingbad:hover {
+  border-color: #9fef00;
+  box-shadow: 0 35px 80px rgba(159, 239, 0, 0.6), 0 0 100px rgba(159, 239, 0, 0.3);
+}
+
+.character-card.breakingbad:hover::after {
+  opacity: 1;
+}
+
+.character-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.6) brightness(0.8);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.character-card:hover .character-image {
+  transform: scale(1.15);
+  filter: grayscale(0) brightness(1.1);
+}
+
+.character-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px;
+  z-index: 2;
+}
+
+.character-name {
+  font-size: 2.2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  margin-bottom: 8px;
+  color: #999;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  font-family: 'Courier New', monospace;
+}
+
+.character-card:hover .character-name {
+  color: #fff;
+  transform: translateY(-5px);
+}
+
+.fightclub:hover .character-name {
+  color: #ff4444;
+  text-shadow: 0 0 30px rgba(255, 68, 68, 1);
+}
+
+.mrrobot:hover .character-name {
+  color: #00ff00;
+  text-shadow: 0 0 30px rgba(0, 255, 0, 1);
+}
+
+.breakingbad:hover .character-name {
+  color: #9fef00;
+  text-shadow: 0 0 30px rgba(159, 239, 0, 1);
+}
+
+.character-tagline {
+  font-size: 0.95rem;
+  color: #777;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  font-family: 'Courier New', monospace;
+}
+
+.character-card:hover .character-tagline {
+  color: #ddd;
+  transform: translateY(-5px);
+}
+
+/* VIDEO PLAYER */
+.video-player {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 1200px;
+  background: #000;
+  border: 4px solid #666;
+  border-radius: 10px;
+  z-index: 2000;
+  display: none;
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.9);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.video-player.active {
+  display: block;
+}
+
+.video-player.minimized {
+  top: auto;
+  bottom: 20px;
+  left: auto;
+  right: 20px;
+  width: 400px;
+  max-width: 90%;
+  transform: none;
+}
+
+body.theme-fightclub .video-player {
+  border-color: #ff4444;
+  box-shadow: 0 0 80px rgba(255, 68, 68, 0.6);
+}
+
+body.theme-mrrobot .video-player {
+  border-color: #00ff00;
+  box-shadow: 0 0 80px rgba(0, 255, 0, 0.6);
+}
+
+body.theme-breakingbad .video-player {
+  border-color: #9fef00;
+  box-shadow: 0 0 80px rgba(159, 239, 0, 0.6);
+}
+
+.video-controls {
+  display: flex;
+  gap: 0;
+  background: rgba(0, 0, 0, 0.95);
+  padding: 10px;
+  border-bottom: 2px solid #333;
+}
+
+.control-btn {
+  background: transparent;
+  border: 2px solid #444;
+  color: #999;
+  padding: 12px 24px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  flex: 1;
+}
+
+.control-btn:hover {
+  background: #666;
+  color: #000;
+  transform: scale(1.05);
+  border-color: #666;
+}
+
+body.theme-fightclub .control-btn:hover {
+  background: #ff4444;
+  border-color: #ff4444;
+}
+
+body.theme-mrrobot .control-btn:hover {
+  background: #00ff00;
+  border-color: #00ff00;
+}
+
+body.theme-breakingbad .control-btn:hover {
+  background: #9fef00;
+  border-color: #9fef00;
+}
+
+.video-player video {
+  width: 100%;
+  display: block;
+  background: #000;
+}
+
+.video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1999;
+  display: none;
+  transition: all 0.4s ease;
+}
+
+.video-overlay.active {
+  display: block;
+}
+
+/* ===================================================
+   HERO BANNER
+   =================================================== */
+.hero-banner {
+  width: 100%;
+  background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 50%, #0d0d0d 100%);
+  border-bottom: 2px solid var(--htb-green);
+  box-shadow: 0 4px 20px rgba(159, 239, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(159, 239, 0, 0.03) 2px,
+      rgba(159, 239, 0, 0.03) 4px
+    );
+  pointer-events: none;
+  animation: scan 8s linear infinite;
+}
+
+.hero-content {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 80px 20px 60px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 900;
+  color: var(--htb-green);
+  text-transform: uppercase;
+  letter-spacing: 12px;
+  margin-bottom: 20px;
+  font-family: 'Courier New', monospace;
+  text-shadow: 
+    0 0 10px rgba(159, 239, 0, 0.5),
+    0 0 20px rgba(159, 239, 0, 0.3),
+    0 0 30px rgba(159, 239, 0, 0.2);
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 
+      0 0 10px rgba(159, 239, 0, 0.5),
+      0 0 20px rgba(159, 239, 0, 0.3),
+      0 0 30px rgba(159, 239, 0, 0.2);
+  }
+  to {
+    text-shadow: 
+      0 0 20px rgba(159, 239, 0, 0.8),
+      0 0 30px rgba(159, 239, 0, 0.5),
+      0 0 40px rgba(159, 239, 0, 0.3);
+  }
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: var(--retro-text-dim);
+  letter-spacing: 3px;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+}
+
+.hero-quote-box {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 30px;
+  background: rgba(26, 26, 26, 0.8);
+  border-left: 4px solid var(--htb-green);
+  border-radius: 6px;
+  text-align: left;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.hero-quote-box p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin: 0;
+  color: var(--retro-text-dim);
+  font-family: 'Courier New', monospace;
+}
+
+.quote-highlight {
+  color: var(--htb-green);
+  font-weight: 700;
+}
+
+/* ===================================================
+   STATS SECTION
+   =================================================== */
+.stats-wrapper {
+  width: 100%;
+  background: var(--retro-bg) !important;
+  padding: 40px 20px;
+  margin: 0;
+}
+
+.stats-compact {
+  display: flex;
+  gap: 12px;
+  max-width: 1150px;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.counter-box {
+  flex: 1;
+  max-width: 140px;
+  background: var(--retro-surface);
+  border: 1px solid;
+  padding: 12px 10px;
+  text-align: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  cursor: pointer;
+}
+
+.counter-box:hover {
+  transform: translateY(-8px) scale(1.1);
+}
+
+.htb-counter {
+  border-color: var(--htb-green);
+}
+
+.htb-counter:hover {
+  box-shadow: 0 10px 30px rgba(159, 239, 0, 0.4);
+  border-color: var(--htb-green);
+  background: rgba(159, 239, 0, 0.05);
+}
+
+.thm-counter {
+  border-color: var(--thm-red);
+}
+
+.thm-counter:hover {
+  box-shadow: 0 10px 30px rgba(192, 57, 43, 0.4);
+  border-color: var(--thm-red);
+  background: rgba(192, 57, 43, 0.05);
+}
+
+.total-counter {
+  border-color: var(--accent-muted);
+}
+
+.total-counter:hover {
+  box-shadow: 0 10px 30px rgba(90, 108, 125, 0.4);
+  border-color: var(--accent-muted);
+  background: rgba(90, 108, 125, 0.05);
+}
+
+.counter-icon {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+  opacity: 0.8;
+  transition: all 0.5s ease;
+}
+
+.counter-box:hover .counter-icon {
+  transform: scale(1.3) rotate(360deg);
+  opacity: 1;
+}
+
+.counter-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 6px 0;
+  font-family: 'Courier New', monospace;
+  transition: all 0.5s ease;
+}
+
+.counter-box:hover .counter-number {
+  transform: scale(1.2);
+}
+
+.htb-counter .counter-number {
+  color: var(--htb-green);
+}
+
+.thm-counter .counter-number {
+  color: var(--thm-red);
+}
+
+.total-counter .counter-number {
+  color: var(--retro-text);
+}
+
+.counter-label {
+  font-size: 0.65rem;
+  color: var(--retro-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.counter-detail {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--retro-border);
+  font-size: 0.6rem;
+  color: var(--retro-text-dim);
+  display: flex;
+  justify-content: space-around;
+  font-family: 'Courier New', monospace;
+}
+
+/* ===================================================
+   POSTS SECTION
+   =================================================== */
+.posts-wrapper {
+  width: 100%;
+  background: var(--retro-bg) !important;
+  padding: 50px 20px 100px;
+  margin: 0;
+}
+
+.writeups-header {
+  max-width: 1150px;
+  margin: 0 auto 30px;
+  padding: 0 20px;
+}
+
+.writeups-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--retro-text);
+  margin-bottom: 10px;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 3px;
+}
+
+.writeups-title::before {
+  content: '>';
+  margin-right: 12px;
+  color: var(--htb-green);
+}
+
+.writeups-subtitle {
+  color: var(--retro-text-dim);
+  font-size: 1rem;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--retro-border);
+  font-family: 'Courier New', monospace;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0 !important;
+  max-width: 1150px;
+  margin: 0 auto !important;
+  background: var(--retro-bg) !important;
+}
+
+.post-list li {
+  margin-bottom: 28px;
+  padding: 28px;
+  background: var(--retro-surface) !important;
+  border: 1px solid var(--retro-border);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.post-list li::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--retro-border);
+  transition: all 0.6s ease;
+}
+
+.post-list li:hover::before {
+  width: 4px;
+  background: var(--htb-green);
+  box-shadow: 0 0 10px var(--htb-green);
+}
+
+.post-list li:hover {
+  border-color: var(--htb-green);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(159, 239, 0, 0.2);
+}
+
+.post-link {
+  font-size: 1.6rem !important;
+  font-weight: 700 !important;
+  display: inline-block;
+  margin-bottom: 14px;
+  text-decoration: none !important;
+  color: var(--retro-text) !important;
+  position: relative;
+  z-index: 1;
+  transition: all 0.5s ease;
+  line-height: 1.4;
+  font-family: 'Courier New', monospace !important;
+}
+
+.post-link:hover {
+  color: var(--htb-green) !important;
+  text-shadow: 0 0 8px rgba(159, 239, 0, 0.3);
+}
+
+.post-link::before {
+  content: '[';
+  margin-right: 6px;
+  color: var(--retro-text-dim);
+  font-weight: 400;
+}
+
+.post-link::after {
+  content: ']';
+  margin-left: 6px;
+  color: var(--retro-text-dim);
+  font-weight: 400;
+}
+
+.post-list .post-meta {
+  border: none !important;
+  padding: 0 !important;
+  margin: 12px 0 !important;
+  font-size: 0.95rem !important;
+  color: var(--retro-text-dim) !important;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-family: 'Courier New', monospace;
+}
+
+.post-meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--retro-text-dim) !important;
+}
+
+.post-excerpt {
+  margin-top: 14px;
+  color: var(--retro-text-dim) !important;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  position: relative;
+  z-index: 1;
+  font-family: 'Courier New', monospace;
+}
+
+.difficulty-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid;
+  font-family: 'Courier New', monospace;
+  transition: all 0.5s ease;
+}
+
+.post-list li:hover .difficulty-badge {
+  transform: scale(1.15);
+}
+
+.difficulty-easy {
+  background: transparent;
+  color: var(--htb-green);
+  border-color: var(--htb-green);
+}
+
+.post-list li:hover .difficulty-easy {
+  background: rgba(159, 239, 0, 0.1);
+  box-shadow: 0 0 15px rgba(159, 239, 0, 0.4);
+}
+
+.difficulty-easy::before {
+  content: '[E]';
+  margin-right: 5px;
+}
+
+.difficulty-medium {
+  background: transparent;
+  color: #d4ac0d;
+  border-color: #d4ac0d;
+}
+
+.post-list li:hover .difficulty-medium {
+  background: rgba(212, 172, 13, 0.1);
+  box-shadow: 0 0 15px rgba(212, 172, 13, 0.4);
+}
+
+.difficulty-medium::before {
+  content: '[M]';
+  margin-right: 5px;
+}
+
+.difficulty-hard {
+  background: transparent;
+  color: var(--thm-red);
+  border-color: var(--thm-red);
+}
+
+.post-list li:hover .difficulty-hard {
+  background: rgba(192, 57, 43, 0.1);
+  box-shadow: 0 0 15px rgba(192, 57, 43, 0.4);
+}
+
+.difficulty-hard::before {
+  content: '[H]';
+  margin-right: 5px;
+}
+
+.post-list div[style*="margin-top: 10px"] {
+  margin-top: 14px !important;
+}
+
+.post-list div[style*="margin-top: 10px"] span {
+  background: transparent !important;
+  color: var(--retro-text-dim) !important;
+  border: 1px solid var(--retro-border) !important;
+  padding: 4px 10px !important;
+  font-size: 0.8rem !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+  font-family: 'Courier New', monospace;
+}
+
+.post-list div[style*="margin-top: 10px"] span:hover {
+  border-color: var(--htb-green) !important;
+  color: var(--htb-green) !important;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(159, 239, 0, 0.3);
+}
+
+.read-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--retro-text-dim);
+  font-size: 0.85rem;
+  font-family: 'Courier New', monospace;
+}
+
+.read-time::before {
+  content: '~';
+  font-weight: 700;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .selector-title {
+    font-size: 2.5rem;
+    letter-spacing: 6px;
+  }
+
+  .selector-subtitle {
+    font-size: 1rem;
+  }
+
+  .character-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .character-name {
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+  }
+
+  .video-player.minimized {
+    width: 280px;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    letter-spacing: 6px;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-content {
+    padding: 50px 20px 40px;
+  }
+
+  .hero-quote-box {
+    padding: 20px;
+  }
+
+  .stats-compact {
+    flex-direction: column;
+    max-width: 280px;
+  }
+  
+  .counter-box {
+    max-width: 100%;
+  }
+  
+  .post-link {
+    font-size: 1.3rem !important;
+  }
+  
+  .writeups-title {
+    font-size: 1.6rem;
+  }
+  
+  .post-list li {
+    padding: 20px;
+  }
+}
+
+/* FADE IN ANIMATIONS */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-list li {
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+.post-list li:nth-child(1) { animation-delay: 0.1s; }
+.post-list li:nth-child(2) { animation-delay: 0.2s; }
+.post-list li:nth-child(3) { animation-delay: 0.3s; }
+.post-list li:nth-child(4) { animation-delay: 0.4s; }
+.post-list li:nth-child(5) { animation-delay: 0.5s; }
+.post-list li:nth-child(6) { animation-delay: 0.6s; }
+.post-list li:nth-child(7) { animation-delay: 0.7s; }
+.post-list li:nth-child(8) { animation-delay: 0.8s; }
+.post-list li:nth-child(9) { animation-delay: 0.9s; }
+.post-list li:nth-child(10) { animation-delay: 1.0s; }
+</style>
+
+<!-- Background Image Container -->
+<div class="bg-image" id="bgImage"></div>
+
+<!-- CHARACTER SELECTOR SECTION -->
+<section class="character-selector-wrapper">
+  <div class="selector-header">
+    <h1 class="selector-title">WHO DO YOU LIKE MOST?</h1>
+    <p class="selector-subtitle">Choose Your Character</p>
+  </div>
+
+  <div class="character-grid">
+    <!-- Fight Club -->
+    <div class="character-card fightclub" 
+         data-theme="fightclub" 
+         data-video="assets/videos/fightclub.mp4"
+         data-bg="assets/images/fightclub-bg.jpg">
+      <img src="https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg" 
+           alt="Fight Club" 
+           class="character-image">
+      <div class="character-info">
+        <div class="character-name">FIGHT CLUB</div>
+        <div class="character-tagline">First Rule: Don't Talk About It</div>
+      </div>
+    </div>
+
+    <!-- Mr. Robot -->
+    <div class="character-card mrrobot" 
+         data-theme="mrrobot" 
+         data-video="assets/videos/mrrobot.mp4"
+         data-bg="assets/images/mrrobot-bg.jpg">
+      <img src="https://image.tmdb.org/t/p/w500/oKIBhzZzDX07SoE2bOLhq2EE8rf.jpg" 
+           alt="Mr Robot" 
+           class="character-image">
+      <div class="character-info">
+        <div class="character-name">MR. ROBOT</div>
+        <div class="character-tagline">Hello, Friend</div>
+      </div>
+    </div>
+
+    <!-- Breaking Bad -->
+    <div class="character-card breakingbad" 
+         data-theme="breakingbad" 
+         data-video="assets/videos/breakingbad.mp4"
+         data-bg="assets/images/breakingbad-bg.jpg">
+      <img src="https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg" 
+           alt="Breaking Bad" 
+           class="character-image">
+      <div class="character-info">
+        <div class="character-name">BREAKING BAD</div>
+        <div class="character-tagline">Say My Name</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Video Player -->
+<div class="video-overlay" id="videoOverlay"></div>
+<div class="video-player" id="videoPlayer">
+  <div class="video-controls">
+    <button class="control-btn" id="minimizeBtn">⬇ Minimize</button>
+    <button class="control-btn" id="stopBtn">⏹ Stop</button>
+    <button class="control-btn" id="closeBtn">✕ Close</button>
+  </div>
+  <video id="videoElement" controls></video>
+</div>
+
+<!-- HERO BANNER -->
+<section class="hero-banner">
+  <div class="hero-content">
+    <h1 class="hero-title">THE PROFESSOR'S LAB</h1>
+    <p class="hero-subtitle">Penetration Testing & Security Research</p>
+    
+    <div class="hero-quote-box">
+      <p>
+        > "Say my name."<br>
+        > "Heisenberg."<br>
+        > <span class="quote-highlight">"You're goddamn right."</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS SECTION -->
+<section class="stats-wrapper">
+  <div class="stats-compact">
+    <div class="counter-box htb-counter">
+      <div class="counter-icon">▣</div>
+      <div class="counter-number" id="htb-count">0</div>
+      <div class="counter-label">HTB</div>
+      <div class="counter-detail">
+        <span>E:<span id="htb-easy-compact">0</span></span>
+        <span>M:<span id="htb-medium-compact">0</span></span>
+        <span>H:<span id="htb-hard-compact">0</span></span>
+      </div>
+    </div>
+
+    <div class="counter-box thm-counter">
+      <div class="counter-icon">▣</div>
+      <div class="counter-number" id="thm-count">0</div>
+      <div class="counter-label">THM</div>
+      <div class="counter-detail">
+        <span>E:<span id="thm-easy-compact">0</span></span>
+        <span>M:<span id="thm-medium-compact">0</span></span>
+        <span>H:<span id="thm-hard-compact">0</span></span>
+      </div>
+    </div>
+
+    <div class="counter-box total-counter">
+      <div class="counter-icon">◈</div>
+      <div class="counter-number" id="total-count">0</div>
+      <div class="counter-label">Total</div>
+      <div class="counter-detail" style="justify-content: center;">
+        <span>Root</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POSTS SECTION -->
+<section class="posts-wrapper">
+  <div class="writeups-header">
+    <h2 class="writeups-title">POSTS</h2>
+    <p class="writeups-subtitle">
+      Penetration testing journey from zero to hero
+    </p>
+  </div>
+  
+  <!-- Jekyll will insert the post list here from the 'home' layout -->
+</section>
+
+<script>
+// CHARACTER SELECTOR SCRIPT
+(function() {
+  const cards = document.querySelectorAll('.character-card');
+  const videoOverlay = document.getElementById('videoOverlay');
+  const videoPlayer = document.getElementById('videoPlayer');
+  const videoElement = document.getElementById('videoElement');
+  const minimizeBtn = document.getElementById('minimizeBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const closeBtn = document.getElementById('closeBtn');
+  const bgImage = document.getElementById('bgImage');
+  const body = document.body;
+  let isMinimized = false;
+
+  // Character selection
+  cards.forEach(card => {
+    card.addEventListener('click', function() {
+      const theme = this.dataset.theme;
+      const videoFile = this.dataset.video;
+      const bgFile = this.dataset.bg;
+      
+      // Apply theme
+      body.className = `theme-${theme} theme-active`;
+      
+      // Set background image
+      if (bgFile) {
+        bgImage.style.backgroundImage = `url('${bgFile}')`;
+      }
+      
+      // Load and play video
+      videoElement.src = videoFile;
+      videoPlayer.classList.add('active');
+      videoOverlay.classList.add('active');
+      videoElement.play();
+      isMinimized = false;
+      minimizeBtn.textContent = '⬇ Minimize';
+    });
+  });
+
+  // Minimize video
+  minimizeBtn.addEventListener('click', () => {
+    if (!isMinimized) {
+      videoPlayer.classList.add('minimized');
+      videoOverlay.classList.remove('active');
+      minimizeBtn.textContent = '⬆ Maximize';
+      isMinimized = true;
+    } else {
+      videoPlayer.classList.remove('minimized');
+      videoOverlay.classList.add('active');
+      minimizeBtn.textContent = '⬇ Minimize';
+      isMinimized = false;
+    }
+  });
+
+  // Stop video
+  stopBtn.addEventListener('click', () => {
+    videoElement.pause();
+    videoElement.currentTime = 0;
+  });
+
+  // Close video
+  closeBtn.addEventListener('click', () => {
+    videoPlayer.classList.remove('active', 'minimized');
+    videoOverlay.classList.remove('active');
+    videoElement.pause();
+    videoElement.currentTime = 0;
+    isMinimized = false;
+    minimizeBtn.textContent = '⬇ Minimize';
+  });
+
+  // Close on overlay click (only when maximized)
+  videoOverlay.addEventListener('click', () => {
+    if (!isMinimized) {
+      closeBtn.click();
+    }
+  });
+
+  // Auto-minimize on scroll
+  window.addEventListener('scroll', () => {
+    if (videoPlayer.classList.contains('active') && !isMinimized && window.scrollY > 200) {
+      minimizeBtn.click();
+    }
+  });
+
+  // ESC key to close
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && videoPlayer.classList.contains('active')) {
+      closeBtn.click();
+    }
+  });
+
+  // Prevent video player from closing when clicking on it
+  videoPlayer.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+})();
+
+// STATS COUNTER SCRIPT
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    const posts = document.querySelectorAll('.post-list li');
+    let htbCount = 0, thmCount = 0;
+    let htbEasy = 0, htbMedium = 0, htbHard = 0;
+    let thmEasy = 0, thmMedium = 0, thmHard = 0;
+    
+    posts.forEach(post => {
+      const link = post.querySelector('.post-link');
+      if (!link) return;
+      
+      const title = link.textContent.toLowerCase();
+      const difficultyBadge = post.querySelector('.difficulty-badge');
+      const difficulty = difficultyBadge ? difficultyBadge.textContent.toLowerCase() : 'easy';
+      
+      if (title.includes('htb:') || title.includes('hackthebox')) {
+        htbCount++;
+        if (difficulty.includes('easy') || difficulty.includes('[e]')) htbEasy++;
+        else if (difficulty.includes('medium') || difficulty.includes('[m]')) htbMedium++;
+        else if (difficulty.includes('hard') || difficulty.includes('[h]')) htbHard++;
+      } 
+      else if (title.includes('thm:') || title.includes('tryhackme')) {
+        thmCount++;
+        if (difficulty.includes('easy') || difficulty.includes('[e]')) thmEasy++;
+        else if (difficulty.includes('medium') || difficulty.includes('[m]')) thmMedium++;
+        else if (difficulty.includes('hard') || difficulty.includes('[h]')) thmHard++;
+      }
+    });
+    
+    function animateCounter(element, target) {
+      if (!element) return;
+      let current = 0;
+      const increment = Math.ceil(target / 15);
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          element.textContent = target;
+          clearInterval(timer);
+        } else {
+          element.textContent = current;
+        }
+      }, 60);
+    }
+    
+    const total = htbCount + thmCount;
+    
+    animateCounter(document.getElementById('htb-count'), htbCount);
+    animateCounter(document.getElementById('thm-count'), thmCount);
+    animateCounter(document.getElementById('total-count'), total);
+    
+    document.getElementById('htb-easy-compact').textContent = htbEasy;
+    document.getElementById('htb-medium-compact').textContent = htbMedium;
+    document.getElementById('htb-hard-compact').textContent = htbHard;
+    
+    document.getElementById('thm-easy-compact').textContent = thmEasy;
+    document.getElementById('thm-medium-compact').textContent = thmMedium;
+    document.getElementById('thm-hard-compact').textContent = thmHard;
+  }, 100);
+});
+</script>
